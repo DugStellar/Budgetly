@@ -1,24 +1,20 @@
 package com.orizon.budgetbuddy
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ExpenseDao {
+    @Query("SELECT * FROM expense_table ORDER BY timestamp DESC")
+    fun getAllExpenses(): LiveData<List<Expense>>
 
-    // Adds or updates an expense
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertExpense(expense: Expense)
+    suspend fun insert(expense: Expense)
 
-    // Removes an expense (useful for swiping to delete)
+    // The new Total Balance query
+    @Query("SELECT SUM(amount) FROM expense_table")
+    fun getTotalExpenses(): LiveData<Double?>
+
     @Delete
-    suspend fun deleteExpense(expense: Expense)
-
-    // Retrieves all expenses, newest first, as a Flow for real-time UI updates
-    @Query("SELECT * FROM expense_table ORDER BY date DESC")
-    fun getAllExpenses(): Flow<List<Expense>>
-
-    // Optional: Clears everything (good for a 'Reset' button)
-    @Query("DELETE FROM expense_table")
-    suspend fun deleteAllExpenses()
+    suspend fun delete(expense: Expense)
 }

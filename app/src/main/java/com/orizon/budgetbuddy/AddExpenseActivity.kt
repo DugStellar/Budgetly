@@ -1,72 +1,69 @@
 package com.orizon.budgetbuddy
 
+import android.graphics.Bitmap
 import android.os.Bundle
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class AddExpenseActivity : AppCompatActivity() {
 
-    private lateinit var database: AppDatabase
+    private lateinit var ivReceiptPreview: ImageView
+    private var capturedImage: Bitmap? = null
+
+    // This handles the result coming back from the camera
+    private val takePicturePreview = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
+        if (bitmap != null) {
+            capturedImage = bitmap
+            ivReceiptPreview.setImageBitmap(bitmap)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_expense)
 
-        // Initialize database
-        database = AppDatabase.getDatabase(this)
-
-        val etAmount = findViewById<EditText>(R.id.etAmount)
         val etDescription = findViewById<EditText>(R.id.etDescription)
-        val spinnerCategory = findViewById<Spinner>(R.id.spinnerCategory)
+        val etAmount = findViewById<EditText>(R.id.etAmount)
+        val btnCapture = findViewById<Button>(R.id.btnCapture)
         val btnSave = findViewById<Button>(R.id.btnSave)
-        val btnAddPhoto = findViewById<Button>(R.id.btnAddPhoto)
+        ivReceiptPreview = findViewById(R.id.ivReceiptPreview)
 
-        // 1. Setup Category Spinner
-        val categories = arrayOf("Food", "Transport", "Rent", "Entertainment", "Other")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, categories)
-        spinnerCategory.adapter = adapter
+        // Launch Camera
+        btnCapture.setOnClickListener {
+            takePicturePreview.launch(null)
+        }
 
-        // 2. Save Button Logic
+        // Save to Database
         btnSave.setOnClickListener {
-            val amountText = etAmount.text.toString()
-            val description = etDescription.text.toString()
-            val category = spinnerCategory.selectedItem.toString()
+            val desc = etDescription.text.toString()
+            val amt = etAmount.text.toString().toDoubleOrNull()
 
-            if (amountText.isNotEmpty() && description.isNotEmpty()) {
-                val amount = amountText.toDouble()
-                saveToDatabase(amount, description, category)
+            if (desc.isNotEmpty() && amt != null) {
+                saveExpense(desc, amt)
             } else {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
             }
         }
-
-        // 3. Optional Photo Placeholder
-        btnAddPhoto.setOnClickListener {
-            Toast.makeText(this, "Camera integration coming in next phase", Toast.LENGTH_SHORT).show()
-        }
     }
 
-    private fun saveToDatabase(amount: Double, desc: String, cat: String) {
-        // Run database operation on IO thread
-        lifecycleScope.launch(Dispatchers.IO) {
-            val newExpense = Expense(
-                amount = amount,
-                description = desc,
-                category = cat,
-                date = System.currentTimeMillis().toString()
-            )
+    private fun saveExpense(description: String, amount: Double) {
+        val database = AppDatabase.getDatabase(this)
+        val newExpense = Expense(
+            description = description,
+            amount = amount,
+            category = "General" // You can add a spinner to select categories later
+        )
 
-            database.expenseDao().insertExpense(newExpense)
-
-            // Switch back to Main thread to update UI
-            withContext(Dispatchers.Main) {
-                Toast.makeText(this@AddExpenseActivity, "Expense Added!", Toast.LENGTH_SHORT).show()
-                finish() // Closes this screen and goes back to Dashboard
-            }
+        lifecycleScope.launch {
+            database.expenseDao().insert(newExpense)
+            Toast.makeText(this@AddExpenseActivity, "Expense Added!", Toast.LENGTH_SHORT).show()
+            finish() // Goes back to Dashboard
         }
     }
 }
