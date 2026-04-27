@@ -16,8 +16,7 @@ class ExpenseAdapter(private var expenses: List<Expense>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExpenseViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_expense, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_expense, parent, false)
         return ExpenseViewHolder(view)
     }
 
@@ -31,7 +30,9 @@ class ExpenseAdapter(private var expenses: List<Expense>) :
     override fun getItemCount() = expenses.size
 
     fun updateData(newExpenses: List<Expense>) {
-        expenses = newExpenses
+        this.expenses = newExpenses
         notifyDataSetChanged()
     }
+
+    fun getExpenseAt(position: Int): Expense = expenses[position]
 }
