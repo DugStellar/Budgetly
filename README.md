@@ -1,7 +1,7 @@
-# BudgetBuddy – Android Budgeting App
+# Budgetly – Android Budgeting App
 
 ## Overview
-BudgetBuddy is a mobile budgeting application built using **Kotlin in Android Studio**. It helps users manage personal finances by tracking expenses, setting monthly budget goals, organizing spending categories, and visualising spending patterns using charts.
+Budgetly is a mobile budgeting application built using **Kotlin in Android Studio**. It helps users manage personal finances by tracking expenses, setting monthly budget goals, organizing spending categories, and visualising spending patterns using charts.
 
 The app uses a **Room Database (SQLite)** for local storage, meaning all user data is stored directly on the device.
 
