@@ -17,11 +17,25 @@
         android:textColor="@color/brand_blue"
         android:textSize="36sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/tvSubtitle"
+        app:layout_constraintBottom_toTopOf="@+id/tvCreatedBy"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/tvCreatedBy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Created by Devon, Tristan, Keeyan"
+        android:textColor="@color/text_secondary"
+        android:textSize="12sp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toTopOf="@+id/tvSubtitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
     <TextView
         android:id="@+id/tvSubtitle"
@@ -31,9 +45,10 @@
         android:text="Take control of your spending today"
         android:textColor="@color/text_secondary"
         android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/tvCreatedBy" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMainExpenses"

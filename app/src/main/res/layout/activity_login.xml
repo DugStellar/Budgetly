@@ -29,6 +29,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="4dp"
+            android:text="Created by Devon, Tristan, Keeyan"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="8dp"
             android:text="Your Personal Finance Assistant"
             android:textColor="@color/text_secondary"
