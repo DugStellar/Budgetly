@@ -30,7 +30,15 @@ class AddExpenseActivity : AppCompatActivity() {
         if (uri != null) {
             photoUri = uri
             binding.tvPhotoStatus.text = "Photo attached"
-            // In a real app, you should copy this file to internal storage
+            
+            // Take persistent permission for the URI
+            try {
+                val contentResolver = contentResolver
+                val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                contentResolver.takePersistableUriPermission(uri, takeFlags)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 

@@ -64,12 +64,24 @@ class ExpenseAdapter(private val onDeleteClick: (Expense) -> Unit) : ListAdapter
 
         private fun showPhotoDialog(uriString: String) {
             val context = itemView.context
-            val builder = android.app.AlertDialog.Builder(context)
-            val imageView = android.widget.ImageView(context)
-            imageView.setImageURI(android.net.Uri.parse(uriString))
-            builder.setView(imageView)
-            builder.setPositiveButton("Close") { d, _ -> d.dismiss() }
-            builder.show()
+            try {
+                val builder = android.app.AlertDialog.Builder(context)
+                val imageView = android.widget.ImageView(context)
+                val uri = android.net.Uri.parse(uriString)
+                
+                // Add padding to image view
+                val padding = (16 * context.resources.displayMetrics.density).toInt()
+                imageView.setPadding(padding, padding, padding, padding)
+                imageView.adjustViewBounds = true
+                
+                imageView.setImageURI(uri)
+                builder.setView(imageView)
+                builder.setPositiveButton("Close") { d, _ -> d.dismiss() }
+                builder.show()
+            } catch (e: Exception) {
+                android.widget.Toast.makeText(context, "Error loading photo", android.widget.Toast.LENGTH_SHORT).show()
+                e.printStackTrace()
+            }
         }
     }
 
