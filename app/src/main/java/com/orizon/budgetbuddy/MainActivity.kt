@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
-        val prefs = getSharedPreferences("BudgetBuddyPrefs", MODE_PRIVATE)
+        val prefs = getSharedPreferences("BudgetlyPrefs", MODE_PRIVATE)
         if (prefs.contains("CURRENT_USER")) {
             startActivity(Intent(this, DashboardActivity::class.java))
             finish()

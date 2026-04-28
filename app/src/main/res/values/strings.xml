@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BudgetBuddy</string>
+    <string name="app_name">Budgetly</string>
     <string name="analytics">Analytics</string>
     <string name="save_expense">Save Expense</string>
     <string name="login">Login</string>

@@ -33,7 +33,7 @@ class LoginActivity : AppCompatActivity() {
                 val match = db.userDao().login(user, pass)
                 if (match != null) {
                     // Save username for session
-                    val prefs = getSharedPreferences("BudgetBuddyPrefs", MODE_PRIVATE)
+                    val prefs = getSharedPreferences("BudgetlyPrefs", MODE_PRIVATE)
                     prefs.edit().putString("CURRENT_USER", match.username).apply()
 
                     Toast.makeText(this@LoginActivity, "Login Successful!", Toast.LENGTH_SHORT).show()

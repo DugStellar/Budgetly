@@ -47,7 +47,7 @@ class DashboardActivity : AppCompatActivity() {
         val btnSetGoals = findViewById<android.widget.Button>(R.id.btnSetGoals)
         val btnFilterDate = findViewById<android.widget.Button>(R.id.btnFilterDate)
 
-        val prefs = getSharedPreferences("BudgetBuddyPrefs", MODE_PRIVATE)
+        val prefs = getSharedPreferences("BudgetlyPrefs", MODE_PRIVATE)
         val username = prefs.getString("CURRENT_USER", "User") ?: "User"
         tvWelcome.text = "Welcome, $username"
 
