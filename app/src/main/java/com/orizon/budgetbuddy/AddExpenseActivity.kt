@@ -19,7 +19,7 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-class AddExpenseActivity : AppCompatActivity() {
+class AddExpenseActivity : AppCompatActivity() { 
 
     private lateinit var binding: ActivityAddExpenseBinding
     private lateinit var database: AppDatabase

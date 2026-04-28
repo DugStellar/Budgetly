@@ -53,7 +53,7 @@ class AnalyticsActivity : AppCompatActivity() {
         updateTitle(tvTitle)
 
         btnBack.setOnClickListener { finish() }
-        
+
         tvTitle.setOnClickListener {
             showDateRangePicker(tvTitle, pieChart)
         }
@@ -111,7 +111,7 @@ class AnalyticsActivity : AppCompatActivity() {
             sdf.timeZone = TimeZone.getTimeZone("UTC")
             startDate = sdf.format(Date(range.first))
             endDate = sdf.format(Date(range.second))
-            
+
             updateTitle(tvTitle)
             loadAnalytics(pieChart)
         }
