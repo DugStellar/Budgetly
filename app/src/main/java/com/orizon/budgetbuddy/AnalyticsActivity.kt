@@ -3,13 +3,18 @@ package com.orizon.budgetbuddy
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.google.android.material.datepicker.MaterialDatePicker
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -18,6 +23,7 @@ import java.util.TimeZone
 class AnalyticsActivity : AppCompatActivity() {
 
     private lateinit var database: AppDatabase
+    private lateinit var expenseAdapter: ExpenseAdapter
     private var startDate: String? = null
     private var endDate: String? = null
 
@@ -28,7 +34,18 @@ class AnalyticsActivity : AppCompatActivity() {
         val pieChart = findViewById<PieChart>(R.id.pieChart)
         val btnBack = findViewById<android.widget.ImageButton>(R.id.btnBack)
         val tvTitle = findViewById<TextView>(R.id.tvAnalyticsTitle)
+        val rvExpenses = findViewById<RecyclerView>(R.id.rvAnalyticsExpenses)
+
         database = AppDatabase.getDatabase(this)
+
+        expenseAdapter = ExpenseAdapter { expense ->
+            lifecycleScope.launch {
+                database.expenseDao().delete(expense)
+                Toast.makeText(this@AnalyticsActivity, "Deleted", Toast.LENGTH_SHORT).show()
+            }
+        }
+        rvExpenses.adapter = expenseAdapter
+        rvExpenses.layoutManager = LinearLayoutManager(this)
 
         startDate = intent.getStringExtra("START_DATE")
         endDate = intent.getStringExtra("END_DATE")
@@ -46,6 +63,10 @@ class AnalyticsActivity : AppCompatActivity() {
 
     private fun loadAnalytics(pieChart: PieChart) {
         val observer = Observer<List<Expense>> { expenses ->
+            // Update List
+            expenseAdapter.submitList(expenses)
+
+            // Update Chart
             if (expenses != null && expenses.isNotEmpty()) {
                 val categoryMap = expenses.groupBy { it.category }
                     .mapValues { entry -> entry.value.sumOf { it.amount } }
